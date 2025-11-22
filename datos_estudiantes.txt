@@ -1,0 +1,45 @@
+4
+Daniel
+18
+10
+10
+9
+8
+9
+9.2
+san salvador
+12
+san salvador
+fernando
+19
+6
+7
+8
+9
+6
+7.2
+san salvador
+12
+san marcos
+daniel
+12
+6.7
+8
+9
+10
+8
+8.34
+mejicanos
+12
+san salvador
+Daniel
+18
+6
+9
+8
+10
+9
+8.4
+san salvador
+31
+mejicanos

@@ -1,0 +1,176 @@
+Proceso GestionEstudiantes
+
+    Estructura Direccion
+        Definir calle como Cadena;
+        Definir numero como Entero;
+        Definir ciudad como Cadena;
+    FinEstructura
+
+    Estructura Estudiante
+        Definir nombre como Cadena;
+        Definir edad como Entero;
+        Definir notas[5] como Real;
+        Definir promedio como Real;
+        Definir direccion como Direccion;
+    FinEstructura
+
+    Definir estudiantes[50] como Estudiante;
+    Definir contador como Entero;
+    Definir ejecutando como Logico;
+    Definir opcion como Entero;
+
+    contador <- 0;
+    ejecutando <- Verdadero;
+
+    Llamar CargarArchivo();
+
+    Repetir
+        LimpiarPantalla;
+        Escribir "--- GESTION DE ESTUDIANTES ---";
+        Escribir "1. Registrar Estudiante";
+        Escribir "2. Mostrar Todos";
+        Escribir "3. Buscar por Nombre";
+        Escribir "4. Guardar y Salir";
+        Escribir "Seleccione una opcion: ";
+        
+        opcion <- Llamar LeerEntero();
+
+        Si (opcion = 1) Entonces
+            Llamar RegistrarEstudiante();
+            Pausar;
+        Sino 
+            Si (opcion = 2) Entonces
+                Llamar MostrarEstudiantes();
+                Pausar;
+            Sino 
+                Si (opcion = 3) Entonces
+                    Llamar BuscarEstudiante();
+                    Pausar;
+                Sino 
+                    Si (opcion = 4) Entonces
+                        Llamar GuardarArchivo();
+                        Escribir "Saliendo del sistema...";
+                        ejecutando <- Falso;
+                    Sino
+                        Escribir "Error: Opcion no valida.";
+                        Pausar;
+                    FinSi
+                FinSi
+            FinSi
+        FinSi
+
+    Hasta Que (ejecutando = Falso);
+
+FinProceso
+
+SubProceso RegistrarEstudiante
+    Definir i como Entero;
+    Definir suma como Real;
+    
+    Si (contador >= 50) Entonces
+        Escribir "Lista llena.";
+    Sino
+        Escribir "--- Registro ---";
+        
+        Escribir "Nombre (Solo letras): ";
+        estudiantes[contador].nombre <- Llamar LeerTexto();
+        
+        Escribir "Edad: ";
+        estudiantes[contador].edad <- Llamar LeerEntero();
+
+        suma <- 0;
+        
+        Para i <- 0 Hasta 4 Con Paso 1 Hacer
+            Escribir "Nota ", i + 1, ": ";
+            estudiantes[contador].notas[i] <- Llamar LeerFlotante();
+            
+            Mientras (estudiantes[contador].notas[i] < 0 O estudiantes[contador].notas[i] > 10) Hacer
+                Escribir "Nota invalida (0-10). Ingrese de nuevo: ";
+                estudiantes[contador].notas[i] <- Llamar LeerFlotante();
+            FinMientras
+
+            suma <- suma + estudiantes[contador].notas[i];
+        FinPara
+
+        estudiantes[contador].promedio <- suma / 5;
+
+        Escribir "Direccion - Calle: ";
+        Leer estudiantes[contador].direccion.calle;
+        
+        Escribir "Direccion - Numero de casa: ";
+        estudiantes[contador].direccion.numero <- Llamar LeerEntero();
+        
+        Escribir "Direccion - Ciudad: ";
+        estudiantes[contador].direccion.ciudad <- Llamar LeerTexto();
+
+        contador <- contador + 1;
+        Escribir "Estudiante registrado con exito.";
+    FinSi
+FinSubProceso
+
+SubProceso MostrarEstudiantes
+    Definir i como Entero;
+    Escribir "--- Lista de Estudiantes ---";
+    Para i <- 0 Hasta contador - 1 Con Paso 1 Hacer
+        Escribir "Estudiante #", i + 1;
+        Escribir "Nombre: ", estudiantes[i].nombre;
+        Escribir "Edad: ", estudiantes[i].edad;
+        Escribir "Promedio: ", estudiantes[i].promedio;
+        Escribir "Ciudad: ", estudiantes[i].direccion.ciudad;
+        Escribir "-------------------------";
+    FinPara
+FinSubProceso
+
+SubProceso BuscarEstudiante
+    Definir busqueda como Cadena;
+    Definir encontrado como Logico;
+    Definir i como Entero;
+    
+    encontrado <- Falso;
+    Escribir "Ingrese nombre a buscar: ";
+    Leer busqueda;
+
+    Para i <- 0 Hasta contador - 1 Con Paso 1 Hacer
+        Si (estudiantes[i].nombre = busqueda) Entonces
+            Escribir "--- ENCONTRADO ---";
+            Escribir "Nombre: ", estudiantes[i].nombre;
+            Escribir "Edad: ", estudiantes[i].edad;
+            Escribir "Promedio: ", estudiantes[i].promedio;
+            Escribir "Direccion: ", estudiantes[i].direccion.calle; 
+            encontrado <- Verdadero;
+        FinSi
+    FinPara
+
+    Si (encontrado = Falso) Entonces
+        Escribir "Estudiante no encontrado.";
+    FinSi
+FinSubProceso
+
+Funcion LeerEntero Retorna Entero
+    Definir entrada como Cadena;
+    Definir esValido como Logico;
+    Definir numero como Entero;
+    Repetir
+        Leer entrada;
+        esValido <- Verdadero;
+        
+        Si (EsNumero(entrada) = Falso) Entonces
+            Escribir "Error: Solo numeros enteros.";
+            esValido <- Falso;
+        FinSi
+    Hasta Que (esValido = Verdadero);
+    numero <- ConvertirAEntero(entrada);
+    Retornar numero;
+FinFuncion
+
+SubProceso GuardarArchivo
+    Abrir "datos.txt" Para Escritura;
+    EscribirEnArchivo datos;
+    Cerrar "datos.txt";
+FinSubProceso
+
+SubProceso CargarArchivo
+    Abrir "datos.txt" Para Lectura;
+    LeerDeArchivo datos;
+    Cerrar "datos.txt";
+FinSubProceso
